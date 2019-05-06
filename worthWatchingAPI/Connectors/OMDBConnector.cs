@@ -32,7 +32,7 @@ namespace worthWatchingAPI.Connectors
                 var movieDetails = new Movie  
                 {  
                     Title = json.SelectToken("Title").Value<string>(),  
-                    ReleaseDate = ToMovieReleaseDate(json.SelectToken("Year").Value<string>()),  
+                    ReleaseDate = json.SelectToken("Year").Value<string>(),  
                     IMDBRating = json.SelectToken("imdbRating").Value<decimal>(),
                     RTRating = 6,
                     MetacriticRating = json.SelectToken("Metascore").Value<int>(),
@@ -45,16 +45,16 @@ namespace worthWatchingAPI.Connectors
         }
 
         //converts from dd Mmm yyyy format
-        private DateTime ToMovieReleaseDate(string date)
-        {
-            string pattern = "dd MMM yyyy";
-            if (DateTime.TryParseExact(date, pattern, null, DateTimeStyles.None, out var parsedDate))
-            {
-                return parsedDate;
-            }
-            else {
-                throw new InvalidCastException();
-            }
-        }
+        // private DateTime ToMovieReleaseDate(string date)
+        // {
+        //     string pattern = "dd MMM yyyy";
+        //     if (DateTime.TryParseExact(date, pattern, null, DateTimeStyles.None, out var parsedDate))
+        //     {
+        //         return parsedDate;
+        //     }
+        //     else {
+        //         throw new InvalidCastException();
+        //     }
+        // }
     }
 }

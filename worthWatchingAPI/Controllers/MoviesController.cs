@@ -23,20 +23,19 @@ namespace worthWatchingAPI.Controllers
         
         // GET api/Movies
         [HttpGet]
-        [Produces("application/json")]
-        public async Task<Movie> GetAsync()
+        public async Task<List<Movie>> GetMovies()
         {
             var title = "something";
-
             var response = await _OMDBConnector.GetMovie(title);
-            return response;
+            return new List<Movie>(){response};
         }
 
         // GET api/Movies/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        [HttpGet("{title}")]
+        public async Task<Movie> GetSingleMovie(string title)
         {
-            return "value";
+            var response = await _OMDBConnector.GetMovie(title);
+            return response;
         }
 
         // POST api/Movies
