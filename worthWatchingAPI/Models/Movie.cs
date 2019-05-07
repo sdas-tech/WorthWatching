@@ -1,6 +1,6 @@
 using System;
 
-namespace worthWatchingAPI.Modles
+namespace worthWatchingAPI.Models
 {
     public class Movie
     {

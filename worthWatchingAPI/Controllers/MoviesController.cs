@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 using worthWatchingAPI.Connectors;
-using worthWatchingAPI.Modles;
+using worthWatchingAPI.Models;
+using worthWatchingAPI.Orchestrators;
 
 namespace worthWatchingAPI.Controllers
 {
@@ -14,46 +15,27 @@ namespace worthWatchingAPI.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        public readonly IOMDBConnector _OMDBConnector;
+        public readonly MovieOrchestrator _movieOrchestrator;
 
-        public MoviesController(IOMDBConnector OMDBConnector)
+        public MoviesController(MovieOrchestrator movieOrchestrator)
         {
-            _OMDBConnector = OMDBConnector;
-        }
-        
-        // GET api/Movies
-        [HttpGet]
-        public async Task<List<Movie>> GetMovies()
-        {
-            var title = "something";
-            var response = await _OMDBConnector.GetMovie(title);
-            return new List<Movie>(){response};
+            _movieOrchestrator = movieOrchestrator;
         }
 
         // GET api/Movies/5
         [HttpGet("{title}")]
         public async Task<Movie> GetSingleMovie(string title)
         {
-            var response = await _OMDBConnector.GetMovie(title);
+            var response = await _movieOrchestrator.GetMovie(title);
             return response;
         }
 
         // POST api/Movies
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<LinkedList<Movie>> GetListOfMovies([FromBody] List<string> titles)
         {
-        }
-
-        // PUT api/Movies/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/Movies/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var response = await _movieOrchestrator.GetMovies(titles);
+            return response;
         }
     }
 }

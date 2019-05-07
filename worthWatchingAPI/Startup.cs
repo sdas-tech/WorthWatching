@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using worthWatchingAPI.Connectors;
+using worthWatchingAPI.Mapping;
+using worthWatchingAPI.Orchestrators;
 
 namespace worthWatchingAPI
 {
@@ -27,6 +29,8 @@ namespace worthWatchingAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddOrchestrations(Configuration);
+            services.AddMapper();
             services.AddHttpClient<IOMDBConnector, OMDBConnector>();
         }
 
@@ -45,6 +49,21 @@ namespace worthWatchingAPI
 
             app.UseHttpsRedirection();
             app.UseMvc();
+        }
+    }
+
+    internal static class serviceExtensions
+    {
+        public static IServiceCollection AddOrchestrations(this IServiceCollection serviceCollection, IConfiguration configuration)
+        {
+            serviceCollection.AddScoped(typeof(MovieOrchestrator));
+            return serviceCollection;
+        }
+
+        public static IServiceCollection AddMapper(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped(typeof(MovieMapper));
+            return serviceCollection;
         }
     }
 }

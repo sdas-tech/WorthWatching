@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using worthWatchingAPI.Modles;
+using Newtonsoft.Json.Linq;
+using worthWatchingAPI.Models;
 
 namespace worthWatchingAPI.Connectors
 {
     public interface IOMDBConnector
     {
-         Task<Movie> GetMovie(string title);
+        Task<JObject> GetMovie(string title, string apikey);
+        //Task<LinkedList<JObject>> GetMovies(List<string> titles, string apikey);
     }
 }
