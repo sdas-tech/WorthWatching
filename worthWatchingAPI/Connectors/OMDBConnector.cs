@@ -26,8 +26,21 @@ namespace worthWatchingAPI.Connectors
             JObject json;
 
             try{
-                var response = await _client.GetStringAsync($"/?t={title}&apikey={apiKey}");
-                json = JObject.Parse(response);
+                var response = await _client.GetAsync($"/?t={title}&apikey={apiKey}");
+                if (response.IsSuccessStatusCode) //todo more validation
+                {
+                    json = JObject.Parse(await response.Content.ReadAsStringAsync());
+                    if (json.ContainsKey("Error"))
+                    {
+                        Console.WriteLine($"Looks like we got an error response when retrieving {title}");
+                        return null;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Recieved a HTTP {response.StatusCode} response when retrieving {title}");
+                    return null;
+                }
             }
             catch (Exception e)
             {

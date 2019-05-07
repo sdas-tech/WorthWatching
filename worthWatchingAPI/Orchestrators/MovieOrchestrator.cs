@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -26,9 +27,17 @@ namespace worthWatchingAPI.Orchestrators
             JObject backendResponse = await _OMDBConnector.GetMovie(title, "3d51a22a"); //todo: get api key from configuration
             //Do some verification (TODO)
             //Map the JSON to a Movie object
-            Movie mappedMovie = _movieMapper.JsonToMovie(backendResponse);
+            if (backendResponse != null)
+            {
+                Movie mappedMovie = _movieMapper.JsonToMovie(backendResponse);
+                return mappedMovie;
+            }
+            else
+            {
+                //todo make exceptions return propper json errors
+                throw new Exception($"Could not retrieve movie {title}");
+            }
 
-            return mappedMovie;
         }
 
         public async Task<LinkedList<Movie>> GetMovies(List<string> titles)
@@ -39,7 +48,23 @@ namespace worthWatchingAPI.Orchestrators
             //todo: make this fancy async
             foreach (var movie in titles)
             {
-                backendResponses.AddLast(await _OMDBConnector.GetMovie(movie, "3d51a22a")); //todo: get api key from configuration
+                try
+                {
+                    JObject singleResponse = await _OMDBConnector.GetMovie(movie, "3d51a22a");
+                    if (singleResponse != null)
+                    {
+                        backendResponses.AddLast(singleResponse); //todo: get api key from configuration
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error when trying to retrieve {movie}, skipping adding it to the list");
+                    }
+                }
+                catch (System.Exception e)
+                {
+                    Console.WriteLine(e);
+                    continue;
+                }
             }
             foreach (JObject jobject in backendResponses)
             {
