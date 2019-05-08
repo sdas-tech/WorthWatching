@@ -7,7 +7,7 @@ namespace worthWatchingAPI.Connectors
 {
     public interface IOMDBConnector
     {
-        Task<JObject> GetMovie(string title, string apikey);
+        Task<JObject> GetMovie(string title);
         //Task<LinkedList<JObject>> GetMovies(List<string> titles, string apikey);
     }
 }

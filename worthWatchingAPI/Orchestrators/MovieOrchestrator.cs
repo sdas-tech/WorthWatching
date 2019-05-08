@@ -24,7 +24,7 @@ namespace worthWatchingAPI.Orchestrators
         public async Task<Movie> GetMovie(string title)
         {
             //Get movie from OMDB
-            JObject backendResponse = await _OMDBConnector.GetMovie(title, "3d51a22a"); //todo: get api key from configuration
+            JObject backendResponse = await _OMDBConnector.GetMovie(title); //todo: get api key from configuration
             //Do some verification (TODO)
             //Map the JSON to a Movie object
             if (backendResponse != null)
@@ -50,7 +50,7 @@ namespace worthWatchingAPI.Orchestrators
             {
                 try
                 {
-                    JObject singleResponse = await _OMDBConnector.GetMovie(movie, "3d51a22a");
+                    JObject singleResponse = await _OMDBConnector.GetMovie(movie);
                     if (singleResponse != null)
                     {
                         backendResponses.AddLast(singleResponse); //todo: get api key from configuration

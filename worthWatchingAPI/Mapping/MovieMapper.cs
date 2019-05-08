@@ -12,10 +12,10 @@ namespace worthWatchingAPI.Mapping
                 //do the mapping
                 var movieDetails = new Movie  
                 {  
-                    Title = json.SelectToken("Title").Value<string>(),  
+                    Title = json.SelectToken("Title").Value<string>(),
                     ReleaseDate = json.SelectToken("Year").Value<string>(),  
                     IMDBRating = json.SelectToken("imdbRating").Value<decimal>(),
-                    RTRating = 0,
+                    RTRating = json.TryGetValue(),
                     MetacriticRating = json.SelectToken("Metascore").Value<int>(),
                     PosterImage = json.SelectToken("Poster").Value<string>() 
                 };
