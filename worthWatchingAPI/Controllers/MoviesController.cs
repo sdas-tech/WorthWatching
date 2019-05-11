@@ -24,7 +24,7 @@ namespace worthWatchingAPI.Controllers
 
         // GET api/Movies/5
         [HttpGet("{title}")]
-        public async Task<Movie> GetSingleMovie(string title)
+        public async Task<ReturnMovie> GetSingleMovie(string title)
         {
             var response = await _movieOrchestrator.GetMovie(title);
             return response;
@@ -32,7 +32,7 @@ namespace worthWatchingAPI.Controllers
 
         // POST api/Movies
         [HttpPost]
-        public async Task<LinkedList<Movie>> GetListOfMovies([FromBody] List<string> titles)
+        public async Task<LinkedList<ReturnMovie>> GetListOfMovies([FromBody] List<string> titles)
         {
             var response = await _movieOrchestrator.GetMovies(titles);
             return response;

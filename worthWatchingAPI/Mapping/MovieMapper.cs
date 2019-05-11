@@ -5,28 +5,28 @@ namespace worthWatchingAPI.Mapping
 {
     public class MovieMapper
     {
-        public Movie JsonToMovie(JObject json)
+        public OMDBMovie JsonToMovie(JObject json)
         {
             if (json.SelectToken("Title") != null)
             {
+                return json.ToObject<OMDBMovie>();
                 //do the mapping
-                var movieDetails = new Movie  
-                {  
-                    Title = json.SelectToken("Title").Value<string>(),
-                    ReleaseDate = json.SelectToken("Year").Value<string>(),  
-                    IMDBRating = json.SelectToken("imdbRating").Value<decimal>(),
-                    RTRating = json.TryGetValue(),
-                    MetacriticRating = json.SelectToken("Metascore").Value<int>(),
-                    PosterImage = json.SelectToken("Poster").Value<string>() 
-                };
+                // var movieDetails = new OMDBMovie  
+                // {  
+                //     Title = json.SelectToken("Title").Value<string>(),
+                //     ReleaseDate = json.SelectToken("Year").Value<string>(),  
+                //     IMDBRating = json.SelectToken("imdbRating").Value<decimal>(),
+                //     RTRating = 0,
+                //     MetacriticRating = json.SelectToken("Metascore").Value<int>(),
+                //     PosterImage = json.SelectToken("Poster").Value<string>() 
+                // };
                 
-                return movieDetails;
+                // return movieDetails;
             }
             else
             {
                 throw new System.Exception("Error when deserialising movie, title was null");
             }
-            return null;
         }
     }
 }

@@ -14,36 +14,39 @@ namespace worthWatchingAPI.Orchestrators
         private readonly IOMDBConnector _OMDBConnector;
         private readonly MovieMapper _movieMapper;
         private readonly IConfiguration _configuration;
+        private readonly MovieConverter _movieConverter;
 
-        public MovieOrchestrator(IOMDBConnector OMDBConnector, MovieMapper movieMapper)
+        public MovieOrchestrator(IOMDBConnector OMDBConnector, MovieMapper movieMapper, MovieConverter movieConverter)
         {
             _OMDBConnector = OMDBConnector;
             _movieMapper = movieMapper;
+            _movieConverter = movieConverter;
         }
 
-        public async Task<Movie> GetMovie(string title)
+        public async Task<ReturnMovie> GetMovie(string title)
         {
             //Get movie from OMDB
-            JObject backendResponse = await _OMDBConnector.GetMovie(title); //todo: get api key from configuration
+            JObject backendResponse = await _OMDBConnector.GetMovie(title);
             //Do some verification (TODO)
             //Map the JSON to a Movie object
             if (backendResponse != null)
             {
-                Movie mappedMovie = _movieMapper.JsonToMovie(backendResponse);
-                return mappedMovie;
+                OMDBMovie mappedMovie = _movieMapper.JsonToMovie(backendResponse);
+                ReturnMovie returnMovie = _movieConverter.OMDBToReturnMovie(mappedMovie);
+                return returnMovie;
             }
             else
             {
-                //todo make exceptions return propper json errors
+                //todo make exceptions return prpper json errors
                 throw new Exception($"Could not retrieve movie {title}");
             }
 
         }
 
-        public async Task<LinkedList<Movie>> GetMovies(List<string> titles)
+        public async Task<LinkedList<ReturnMovie>> GetMovies(List<string> titles)
         {
             LinkedList<JObject> backendResponses = new LinkedList<JObject>();
-            LinkedList<Movie> movieList = new LinkedList<Movie>();
+            LinkedList<ReturnMovie> movieList = new LinkedList<ReturnMovie>();
 
             //todo: make this fancy async
             foreach (var movie in titles)
@@ -53,7 +56,7 @@ namespace worthWatchingAPI.Orchestrators
                     JObject singleResponse = await _OMDBConnector.GetMovie(movie);
                     if (singleResponse != null)
                     {
-                        backendResponses.AddLast(singleResponse); //todo: get api key from configuration
+                        backendResponses.AddLast(singleResponse);
                     }
                     else
                     {
@@ -68,7 +71,7 @@ namespace worthWatchingAPI.Orchestrators
             }
             foreach (JObject jobject in backendResponses)
             {
-                movieList.AddLast(_movieMapper.JsonToMovie(jobject));
+                //movieList.AddLast(_movieMapper.JsonToMovie(jobject));
             }
 
             return movieList;

@@ -31,6 +31,7 @@ namespace worthWatchingAPI
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddOrchestrations(Configuration);
             services.AddMapper();
+            services.AddConverter();
             services.AddHttpClient<IOMDBConnector, OMDBConnector>();
         }
 
@@ -63,6 +64,12 @@ namespace worthWatchingAPI
         public static IServiceCollection AddMapper(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped(typeof(MovieMapper));
+            return serviceCollection;
+        }
+        
+        public static IServiceCollection AddConverter(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped(typeof(MovieConverter));
             return serviceCollection;
         }
     }
