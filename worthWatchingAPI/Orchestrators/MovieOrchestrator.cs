@@ -38,7 +38,8 @@ namespace worthWatchingAPI.Orchestrators
             else
             {
                 //todo make exceptions return prpper json errors
-                throw new Exception($"Could not retrieve movie {title}");
+                return null;
+                //throw new Exception($"Could not retrieve movie {title}");
             }
 
         }
