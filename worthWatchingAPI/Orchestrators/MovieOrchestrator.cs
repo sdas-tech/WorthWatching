@@ -46,7 +46,7 @@ namespace worthWatchingAPI.Orchestrators
 
         public async Task<LinkedList<ReturnMovie>> GetMovies(List<string> titles)
         {
-            LinkedList<JObject> backendResponses = new LinkedList<JObject>();
+            //LinkedList<JObject> backendResponses = new LinkedList<JObject>();
             LinkedList<ReturnMovie> movieList = new LinkedList<ReturnMovie>();
 
             //todo: make this fancy async
@@ -57,7 +57,9 @@ namespace worthWatchingAPI.Orchestrators
                     JObject singleResponse = await _OMDBConnector.GetMovie(movie);
                     if (singleResponse != null)
                     {
-                        backendResponses.AddLast(singleResponse);
+                        OMDBMovie mappedMovie = _movieMapper.JsonToMovie(singleResponse);
+                        ReturnMovie returnMovie = _movieConverter.OMDBToReturnMovie(mappedMovie);
+                        movieList.AddLast(returnMovie);
                     }
                     else
                     {
@@ -67,13 +69,12 @@ namespace worthWatchingAPI.Orchestrators
                 catch (System.Exception e)
                 {
                     Console.WriteLine(e);
-                    continue;
                 }
             }
-            foreach (JObject jobject in backendResponses)
-            {
-                //movieList.AddLast(_movieMapper.JsonToMovie(jobject));
-            }
+            //foreach (JObject jobject in backendResponses)
+            //{
+            //    movieList.AddLast(_movieMapper.JsonToMovie(jobject));
+            //}
 
             return movieList;
         }
