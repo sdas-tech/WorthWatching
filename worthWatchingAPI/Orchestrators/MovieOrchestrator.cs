@@ -37,7 +37,7 @@ namespace worthWatchingAPI.Orchestrators
             }
             else
             {
-                //todo make exceptions return prpper json errors
+                //todo make exceptions return proper json errors
                 return null;
                 //throw new Exception($"Could not retrieve movie {title}");
             }

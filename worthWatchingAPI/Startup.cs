@@ -53,7 +53,7 @@ namespace worthWatchingAPI
         }
     }
 
-    internal static class serviceExtensions
+    internal static class ServiceExtensions
     {
         public static IServiceCollection AddOrchestrations(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
