@@ -13,7 +13,9 @@
       "commandName": "IISExpress",
       "launchUrl": "api/values",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "SECRET_ApplicationInsights:InstrumentationKey": "chicken",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "SECRET_OMDBApiKey": "3d51a22a"
       }
     },
     "worthWatchingAPI": {
