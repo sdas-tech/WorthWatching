@@ -1,30 +1,24 @@
-// Inject the payload.js script into the current tab after the popout has loaded
-window.addEventListener('load', function (evt) {
-    chrome.extension.getBackgroundPage().chrome.tabs.executeScript(null, {
-        file: 'payload.js'
-    });;
-});
+console.log("in the popup.js");
+let bgpage = chrome.extension.getBackgroundPage();
+let word = bgpage.word.trim();
+console.log(document.getElementById('pagetitle'));
 
-function makeUL(array) {
-    // Create the list element:
-    var list = document.createElement('ul');
+let url = `https://worthwatchingapi.azurewebsites.net/api/Movies/${word}`;
 
-    for (var i = 0; i < array.length; i++) {
-        // Create the list item:
-        var item = document.createElement('li');
+document.getElementById('showtitle').innerHTML = "?";
+document.getElementById('imdbRating').innerHTML = "?";
+document.getElementById('rtRating').innerHTML = "?";
+document.getElementById('metacriticRating').innerHTML = "?";
 
-        // Set its contents:
-        item.appendChild(document.createTextNode(array[i]));
-
-        // Add it to the list:
-        list.appendChild(item);
-    }
-
-    // Finally, return the constructed list:
-    return list;
-}
-
-// Listen to messages from the payload.js script and write to popout.html
-chrome.runtime.onMessage.addListener(function (message) {
-    document.getElementById('pagetitle').innerHTML = message;
+fetch(url)
+.then((response) => response.json())
+.then(function(data) {
+    document.getElementById('showtitle').innerHTML = data.title;
+    document.getElementById('imdbRating').innerHTML = data.imdbRating;
+    document.getElementById('rtRating').innerHTML = data.rtRating;
+    document.getElementById('metacriticRating').innerHTML = data.metacriticRating;
+})
+.catch(function(error) {
+    console.log("got an error");
+    console.error(error);
 });
